@@ -1,12 +1,12 @@
 from collections import deque
 from urllib.parse import urlparse
 import os
-from crawler_helper import extract_all_text, get_domain_hyperlinks
+from crawler_helper import extract_all_text, get_domain_hyperlinks, get_domain_name
 
 
 def crawl_single_site(url): 
     # Parse the URL and get the domain
-    local_domain = urlparse(url).netloc
+    local_domain = get_domain_name(url)
     create_folders_if_not_exists(local_domain)
     # Save text from the url to a <url>.txt file
     with open('text/'+local_domain+'/'+url[8:].replace("/", "_") + ".txt", "w", encoding="UTF-8") as f:
@@ -21,7 +21,7 @@ def crawl_single_site(url):
 
 
 def crawl_entire_site_bfs(url, max_urls_to_crawl=100, max_depth=100):
-    local_domain = urlparse(url).netloc
+    local_domain = get_domain_name(url)
     create_folders_if_not_exists(local_domain)
     queue = deque([url])
     visited = set([url])

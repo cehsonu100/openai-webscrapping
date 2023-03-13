@@ -8,19 +8,18 @@ from openai.embeddings_utils import distances_from_embeddings, cosine_similarity
 from crawler import crawl_single_site
 from openai_embedding import answer_question, create_context, split_into_many
 
-openai.api_key = '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'
+openai.api_key = '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'
 max_tokens = 500
-
-# Regex pattern to match a URL
-HTTP_URL_PATTERN = r'^http[s]*://.+'
+# # Regex pattern to match a URL
+# HTTP_URL_PATTERN = r'^http[s]*://.+'
 
 # Define root domain to crawl
-domain = "www.fullerton.edu"
-full_url = "https://www.fullerton.edu/ecs/future/graduate-admission.php"
+# domain = "www.fullerton.edu"
+# full_url = "https://www.fullerton.edu/ecs/future/graduate-admission.php"
 
 
-crawl_single_site(full_url)
-crawl_single_site("http://www.fullerton.edu/graduate/admissions/applying.php")
+# crawl_single_site(full_url)
+# crawl_single_site("http://www.fullerton.edu/graduate/admissions/applying.php")
 
 
 def remove_newlines(serie):
@@ -31,7 +30,7 @@ def remove_newlines(serie):
     return serie
 
 
-def write_txt_into_csv():
+def write_txt_into_csv(domain):
     texts=[]
 
     # Get all the text files in the text directory
@@ -52,7 +51,7 @@ def write_txt_into_csv():
     df.head()
 
 
-def create_openai_embedding():
+def create_openai_embedding(domain):
     # Load the cl100k_base tokenizer which is designed to work with the ada-002 model
     tokenizer = tiktoken.get_encoding("cl100k_base")
 
@@ -63,7 +62,7 @@ def create_openai_embedding():
     df['n_tokens'] = df.text.apply(lambda x: len(tokenizer.encode(x)))
 
     # Visualize the distribution of the number of tokens per row using a histogram
-    df.n_tokens.hist()
+    # df.n_tokens.hist()
 
     shortened = []
 
@@ -84,7 +83,7 @@ def create_openai_embedding():
 
     df = pd.DataFrame(shortened, columns = ['text'])
     df['n_tokens'] = df.text.apply(lambda x: len(tokenizer.encode(x)))
-    df.n_tokens.hist()
+    # df.n_tokens.hist()
 
     df['embeddings'] = df.text.apply(lambda x: openai.Embedding.create(input=x, engine='text-embedding-ada-002')['data'][0]['embedding'])
     df.to_csv('processed/' + domain + '/embeddings.csv')

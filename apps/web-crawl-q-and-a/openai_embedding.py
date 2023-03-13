@@ -84,18 +84,19 @@ def create_context(
 
 def answer_question(
     # df,
+    domain,
     model="text-davinci-003",
     question="Am I allowed to publish model outputs to Twitter, without a human review?",
     max_len=1800,
     size="ada",
     debug=False,
     max_tokens=150,
-    stop_sequence=None
+    stop_sequence=None,
 ):
     """
     Answer a question based on the most similar context from the dataframe texts
     """
-    df=pd.read_csv('processed/embeddings.csv', index_col=0)
+    df=pd.read_csv('processed/' + domain + '/embeddings.csv', index_col=0)
     df['embeddings'] = df['embeddings'].apply(eval).apply(np.array)
 
     df.head()

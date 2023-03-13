@@ -100,3 +100,13 @@ def get_domain_hyperlinks(local_domain, url):
     return list(set(clean_links))
 
 
+def get_domain_name(url):
+    try:
+        local_domain = urlparse(url).netloc
+        if(local_domain.startswith("www.")):
+            local_domain = local_domain[4:]
+        return local_domain
+    except Exception as e:
+        raise Exception("Error: Invalid URL", e)
+
+
